@@ -2,9 +2,14 @@ const { Client, RemoteAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const { MongoStore } = require('wwebjs-mongo');
 const mongoose = require('mongoose');
+const {handleCommands} = require('./handleCommands')
 require('dotenv').config()
 
-mongoose.connect(process.env.DB_STRING).then(() => {
+*mongoose.connect(process.env.DB_STRING).then(async() => {
+    const msg = await handleCommands("12121", "", "", "/add cf profile - technomaniac");
+    console.log(msg);
+});
+/*mongoose.connect(process.env.DB_STRING).then(() => {
     const store = new MongoStore({ mongoose: mongoose });
     const client = new Client({
         webVersionCache: {
@@ -23,6 +28,7 @@ mongoose.connect(process.env.DB_STRING).then(() => {
     
     client.once('ready', () => {
         console.log('Client is ready!');
+        fn();
     });
 
     client.on('remote_session_saved', () => {
@@ -47,3 +53,4 @@ mongoose.connect(process.env.DB_STRING).then(() => {
     
     client.initialize();    
 });
+*/

@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 const groupSchema = new Schema({
   id: {type: String, required: true},
   name: {type: String, required: true},
-  members: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
+  members: [{type: Schema.Types.ObjectId, ref: 'User'}]
 });
 
 const Group = mongoose.model('Group', userSchema);
