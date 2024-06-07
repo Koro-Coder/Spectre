@@ -1,26 +1,11 @@
 const { MongoClient } = require('mongodb');
 require('dotenv').config();
 const mongoose = require('mongoose');
-const User = require('../models/User.js');
-
-const uri = 'mongodb+srv://SupremeLeader:4DukR8CUJVyEsV8V@cluster-dev.a4dfbsd.mongodb.net/?retryWrites=true&w=majority&appName=Cluster-dev';
+const User = require('../../models/User.js');
 
 async function showUserDetails(phone_number){
   return await User.findOne({phone_number: phone_number});
 }
-
-/*async function addDetails(phone_number, data){
-  const user = await User.findOne({phone_number: phone_number});
-  if(user){
-    Object.keys(data).forEach(key => {
-      user[key] = data[key];
-    });
-    await user.save();
-  }else{
-    await User.create({ phone_number: phone_number, });
-  }
-}
-*/
 
 async function addUserDetails(phone_number, updates) {
   try {

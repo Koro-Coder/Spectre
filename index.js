@@ -2,11 +2,11 @@ const { Client, RemoteAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode-terminal');
 const { MongoStore } = require('wwebjs-mongo');
 const mongoose = require('mongoose');
-const {handleCommands} = require('./handleCommands')
+const {handleCommands} = require('./controllers/handleCommands.js')
 require('dotenv').config()
 
 *mongoose.connect(process.env.DB_STRING).then(async() => {
-    const msg = await handleCommands("12121", "", "", "/add cf profile - technomaniac");
+    const msg = await handleCommands("12121", "groupid", "mentions[0]", "/add cf profile - technomaniac");
     console.log(msg);
 });
 /*mongoose.connect(process.env.DB_STRING).then(() => {

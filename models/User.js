@@ -11,7 +11,8 @@ const userSchema = new Schema({
   last_timestamp: {type: Date},
   lc_problems_solved: {type: Number},
   cf_problems_solved: {type: Number},
-  last_updated: {type: Number, default: Date.now}
+  last_checked: {type: Number, default: 0},
+  total_problems_solved: {type: Number, default: 0}
 });
 
 const User = mongoose.model('User', userSchema);

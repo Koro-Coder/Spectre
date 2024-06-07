@@ -5,69 +5,11 @@ const LEETCODE_API_ENDPOINT = 'https://leetcode.com/graphql'
 const DAILY_CODING_CHALLENGE_QUERY = `
 query questionOfToday {
     activeDailyCodingChallengeQuestion {
-        date
-        link
         question {
-            questionId
-            questionFrontendId
-            boundTopicId
             title
             titleSlug
-            content
-            translatedTitle
-            translatedContent
-            isPaidOnly
             difficulty
-            likes
-            dislikes
-            isLiked
-            similarQuestions
-            exampleTestcases
-            contributors {
-                username
-                profileUrl
-                avatarUrl
-            }
-            topicTags {
-                name
-                slug
-                translatedName
-            }
-            companyTagStats
-            codeSnippets {
-                lang
-                langSlug
-                code
-            }
-            stats
-            hints
-            solution {
-                id
-                canSeeDetail
-                paidOnly
-                hasVideoSolution
-                paidOnlyVideo
-            }
-            status
-            sampleTestCase
-            metaData
-            judgerAvailable
-            judgeType
-            mysqlSchemas
-            enableRunCode
-            enableTestMode
-            enableDebugger
-            envInfo
-            libraryUrl
-            adminUrl
-            challengeQuestion {
-                id
-                date
-                incompleteChallengeCount
-                streakCount
-                type
-            }
-            note
+            stats 
         }
     }
 }`
@@ -80,65 +22,26 @@ query questionOfToday {
       }
       matchedUser(username: $username) {
           username
-          githubUrl
-          twitterUrl
-          linkedinUrl
-          contributions {
-              points
-              questionCount
-              testcaseCount
-          }
           profile {
               realName
-              userAvatar
-              birthday
               ranking
-              reputation
-              websites
-              countryName
-              company
-              school
-              skillTags
-              aboutMe
-              starRating
           }
-          badges {
-              id
-              displayName
-              icon
-              creationDate
-          }
-          upcomingBadges {
-              name
-              icon
-          }
-          activeBadge {
-              id
-              displayName
-              icon
-              creationDate
-          }
-          submitStats {
-              totalSubmissionNum {
-                  difficulty
-                  count
-                  submissions
-              }
-              acSubmissionNum {
-                  difficulty
-                  count
-                  submissions
-              }
-          }
-          submissionCalendar
       }
-      recentSubmissionList(username: $username, limit: $limit) {
-          title
-          titleSlug
-          timestamp
-          statusDisplay
-          lang
+      recentAcSubmissionList(username: $username, limit: $limit) {
+        title
+        titleSlug
+        timestamp
+        lang
       }
+      userContestRanking(username: $username) {
+        attendedContestsCount
+        rating
+        globalRanking
+        topPercentage
+        badge {
+            name
+        }
+    }
   }`;
   
   const USER_CONTEST_HISTORY_QUERY = `
@@ -147,11 +50,22 @@ query questionOfToday {
         attendedContestsCount
         rating
         globalRanking
-        totalParticipants
         topPercentage
         badge {
             name
         }
+    }
+}`;
+
+const PROBLEM_DETAILS = `query selectProblem($titleSlug: String!) {
+    question(titleSlug: $titleSlug) {
+        title
+        titleSlug
+        difficulty
+        topicTags {
+            name
+        }
+        stats
     }
 }`;
 
@@ -168,7 +82,9 @@ const fetchDailyCodingChallenge = async () => {
 
     const response = await fetch(LEETCODE_API_ENDPOINT, init);
     const responseData = await response.json(); 
-    console.log(responseData.data.activeDailyCodingChallengeQuestion); 
+    responseData.data.activeDailyCodingChallengeQuestion.question.stats = JSON.parse(responseData.data.activeDailyCodingChallengeQuestion.question.stats);
+    
+    console.log(responseData.data.activeDailyCodingChallengeQuestion.question); 
 }
 
 //fetchDailyCodingChallenge();
@@ -190,6 +106,7 @@ const fetchUserProfileInfo = async (options) => {
 
     const response = await fetch(LEETCODE_API_ENDPOINT, init);
     const responseData = await response.json(); 
+    
     console.log(responseData.data);
     //console.log(responseData.data.matchedUser.submitStats); 
 }
@@ -213,8 +130,35 @@ const fetchUserContestHistory = async (options) => {
 
     const response = await fetch(LEETCODE_API_ENDPOINT, init);
     const responseData = await response.json(); 
+    
     console.log(responseData.data);
     //console.log(responseData.data.matchedUser.submitStats); 
 }
 
-fetchUserContestHistory({username:"mrgamer2801", limit:2});
+const fetchProblemDetails = async (options) => {
+    console.log(`Fetching user profile information from LeetCode API.`)
+
+    const init = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            query: PROBLEM_DETAILS,
+            variables: {
+                titleSlug: options.titleSlug, 
+              }
+         }),
+    }
+
+    const response = await fetch(LEETCODE_API_ENDPOINT, init);
+    const responseData = await response.json(); 
+    responseData.data.question.stats = JSON.parse(responseData.data.question.stats);
+    
+    console.log(responseData.data.question);
+    //console.log(responseData.data.matchedUser.submitStats); 
+}
+
+//fetchUserProfileInfo({username:"mrgamer2801", limit:5});
+fetchDailyCodingChallenge();
+//fetchProblemDetails({titleSlug: 'replace-words'});
+
+// delete contest history query
