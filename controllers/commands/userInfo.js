@@ -9,10 +9,8 @@ async function showUserDetails(phone_number){
 
 async function addUserDetails(phone_number, updates) {
   try {
-    // Include the phoneNumber in the updates
     updates.phone_number = phone_number;
 
-    // Find the user by phone number and update or insert if it doesn't exist
     const user = await User.findOneAndUpdate(
       { phone_number },
       { $set: updates },
