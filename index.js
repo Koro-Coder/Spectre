@@ -3,14 +3,14 @@ const qrcode = require('qrcode-terminal');
 const { MongoStore } = require('wwebjs-mongo');
 const mongoose = require('mongoose');
 const {handleCommands} = require('./controllers/handleCommands.js')
-const {handleNewAcceptances} = require('./controllers/handleNewAcceptances.js');
+const {handleLatestUpdates} = require('./controllers/handlelLatestUpdates.js');
 require('dotenv').config()
 
 *mongoose.connect(process.env.DB_STRING).then(async() => {
     //const msg = await handleCommands("123321", "groupid", "mentions[0]", "/add lc profile - mamer2801");
     //console.log(msg);
 
-    handleNewAcceptances();
+    handleLatestUpdates();
 });
 /*mongoose.connect(process.env.DB_STRING).then(() => {
     const store = new MongoStore({ mongoose: mongoose });

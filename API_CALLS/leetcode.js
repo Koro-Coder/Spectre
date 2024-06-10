@@ -59,78 +59,60 @@ const PROBLEM_DETAILS = `query selectProblem($titleSlug: String!) {
     }
 }`;
 
-// We can pass the JSON response as an object to our createTodoistTask later.
 const fetchDailyCodingChallenge = async () => {
-  console.log(`Fetching daily coding challenge from LeetCode API.`);
-
   const init = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ query: DAILY_CODING_CHALLENGE_QUERY }),
   };
-
   const response = await fetch(LEETCODE_API_ENDPOINT, init);
   const responseData = await response.json();
   responseData.data.activeDailyCodingChallengeQuestion.question.stats =
     JSON.parse(
       responseData.data.activeDailyCodingChallengeQuestion.question.stats
     );
-
-  console.log(responseData.data.activeDailyCodingChallengeQuestion.question);
+  return responseData.data.activeDailyCodingChallengeQuestion.question;
 };
 
-//fetchDailyCodingChallenge();
-
 const fetchUserProfileInfo = async (username) => {
-  //console.log(`Fetching user profile information from LeetCode API.`);
-
   const init = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       query: USER_PROFILE_INFORMATION_QUERY,
       variables: {
-        username: username, //username required
-        limit: 5, //only for submission
+        username: username,
+        limit: 5,
       },
     }),
   };
-
   const response = await fetch(LEETCODE_API_ENDPOINT, init);
   const responseData = await response.json();
-
-  console.log("LC API", responseData.data);
   return responseData.data;
-  //console.log(responseData.data.matchedUser.submitStats);
 };
 
-const fetchProblemDetails = async (options) => {
-  console.log(`Fetching user profile information from LeetCode API.`);
-
+const fetchProblemDetails = async (titleSlug) => {
   const init = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       query: PROBLEM_DETAILS,
       variables: {
-        titleSlug: options.titleSlug,
+        titleSlug: titleSlug,
       },
     }),
   };
-
   const response = await fetch(LEETCODE_API_ENDPOINT, init);
   const responseData = await response.json();
   responseData.data.question.stats = JSON.parse(
     responseData.data.question.stats
   );
-
-  console.log(responseData.data.question);
-  //console.log(responseData.data.matchedUser.submitStats);
+  return responseData.data.question;
 };
 
 //fetchUserProfileInfo("mrgamer2801");
 //fetchDailyCodingChallenge();
-//fetchProblemDetails({titleSlug: 'replace-words'});
+//fetchProblemDetails('replace-words');
 
 module.exports = {
   fetchDailyCodingChallenge,

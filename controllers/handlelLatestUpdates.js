@@ -1,16 +1,15 @@
 const User = require('../models/User.js')
 const {fetchProblemDetails, fetchUserProfileInfo} = require('../API_CALLS/leetcode.js')
 
-async function handleNewAcceptances(){
+async function handleLatestUpdates(){
     const users = await User.find({ });
     for (const user of users) {
-      
         //leetcode Checks
         if(user.leetcode.username)
         {
-            console.log(user.leetcode.username);
+            //console.log(user.leetcode.username);
             const currentUser = await fetchUserProfileInfo(user.leetcode.username);
-            console.log("current user : ", user)
+            //console.log("current user : ", user)
             // perform updates on user instance
             if(currentUser.matchedUser)
             {
@@ -25,24 +24,24 @@ async function handleNewAcceptances(){
                 user.leetcode.badge = currentUser.userContestRanking.badge.name;
 
                 //check for new submissions
+                user.last_checked = 0;
                 last_checked = user.last_checked;
                 last_title = "";
                 currentUser.recentAcSubmissionList.reverse();
-                //console.log(currentUser.recentAcSubmissionList);
 
                 for(const problem of currentUser.recentAcSubmissionList)
                 {
-                    //console.log('problem', problem);
-                    //console.log(last_checked, last_title);
                     if(problem.title!=last_title && problem.timestamp>last_checked)
                     {
                         console.log('solved new problem');
-                        user.last_checked = problem.timestamp;
+                        // send back message 
+                        const problemDetails = await fetchProblemDetails(problem.titleSlug);
+                        console.log(problemDetails);
                     }
+                    last_checked = Math.max(problem.timestamp, last_checked);
                     last_title = problem.title;
                 }
-
-                // update last checked
+                user.last_checked = last_checked;
             }
         }
         
@@ -53,4 +52,4 @@ async function handleNewAcceptances(){
     console.log(all);
 }
 
-module.exports = {handleNewAcceptances};
+module.exports = {handleLatestUpdates};
