@@ -1,25 +1,36 @@
+const { fetchCFUserProfileInfo, fetchCFUserProblemCount } = require("../API_CALLS/codeforces.js");
+const { fetchLCUserProfileInfo } = require("../API_CALLS/leetcode.js");
+const { leetcodeDataHandler } = require("../utils/leetcodeUtils.js");
+const { codeforcesDataHandler } = require("../utils/codeforcesUtils.js");
 const { addUserDetails, showUserDetails } = require("./commands/userInfo.js");
 
 async function addLCProfile(phone_number, _, _, username) {
-  const user = await addUserDetails(phone_number, {
-    leetcode: {
-      username: username,
-    },
-    last_checked: Math.floor(Date.now() /1000)
-  });
-  if (user) return user;
-  else return "Error updating user details.";
+  const LCinfo = await fetchLCUserProfileInfo(username);
+  if (LCinfo.matchedUser) 
+  {
+    const leetcode = leetcodeDataHandler(LCinfo);
+    const user = await addUserDetails(phone_number, {
+      leetcode: leetcode,
+      last_checked: Math.floor(Date.now() / 1000),
+    });
+    return "User information updated";
+  }
+  else  return "Invalid username";
 }
 
 async function addCFProfile(phone_number, _, _, username) {
-  const user = await addUserDetails(phone_number, {
-    codeforces: {
-      username: username,
-    },
-    last_checked: Math.floor(Date.now() /1000)
-  });
-  if (user) return user;
-  else return "Error updating user details.";
+  const CFinfo = await fetchCFUserProfileInfo(username);
+  if (CFinfo) 
+  {
+    const codeforces = codeforcesDataHandler(CFinfo);
+    codeforces.problems_solved = await fetchCFUserProblemCount(username);
+    const user = await addUserDetails(phone_number, {
+      codeforces: codeforces,
+      last_checked: Math.floor(Date.now() / 1000),
+    });
+    return "User information updated";
+  }
+  else  return "Invalid username";
 }
 
 async function showMyStats(phone_number, _, _, _) {

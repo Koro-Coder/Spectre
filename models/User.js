@@ -19,7 +19,12 @@ const userSchema = new Schema({
   },
   codeforces: {
     username: String,
-    problems_solved: Number,
+    problems_solved: [{
+      range: String,
+      count: Number,
+    }],
+    rating: Number,
+    rank: String,
   },
   total_problems_solved: { type: Number, default: 0 },
   last_checked: { type: Number, default: 0 },

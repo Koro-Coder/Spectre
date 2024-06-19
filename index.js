@@ -4,15 +4,21 @@ const { MongoStore } = require('wwebjs-mongo');
 const mongoose = require('mongoose');
 const {handleCommands} = require('./controllers/handleCommands.js')
 const {handleLatestUpdates} = require('./controllers/handlelLatestUpdates.js');
+const {run} = require('./controllers/commands/groupInfo.js')
+
 require('dotenv').config()
 
-*mongoose.connect(process.env.DB_STRING).then(async() => {
-    //const msg = await handleCommands("123321", "groupid", "mentions[0]", "/add lc profile - mamer2801");
+mongoose.connect(process.env.DB_STRING).then(async() => {
+    //const msg = await handleCommands("1234567", "groupid", "mentions[0]", "/addCFprofile - teoaniac");
     //console.log(msg);
 
     handleLatestUpdates();
 });
-/*mongoose.connect(process.env.DB_STRING).then(() => {
+
+
+/*
+mongoose.connect(process.env.DB_STRING).then(() => {
+    console.log("Connected to server");
     const store = new MongoStore({ mongoose: mongoose });
     const client = new Client({
         webVersionCache: {
@@ -31,29 +37,35 @@ require('dotenv').config()
     
     client.once('ready', () => {
         console.log('Client is ready!');
-        fn();
     });
 
     client.on('remote_session_saved', () => {
         console.log('Session Saved');
     });
-    
+
+    client.on('group_join', async(notification)=>{
+        console.log('Group Joined :: ',notification);
+        const participantId = notification.recipientIds[0];
+        const participant = await client.getContactById(participantId);
+        console.log(participant);
+    })
     
     client.on('message', async (msg) => {
     
-        const c1 = await msg.getContact();
-        console.log('getContact - ', c1);
+        //const c1 = await msg.getContact();
+        //console.log('getContact - ', c1);
     
-        const c2 = msg.from;
-        console.log('from  - ', c2);
+        //const c2 = msg.from;
+        //console.log('from  - ', c2);
     
         console.log('message - ', msg.body);
+        run(msg);
     
         if (msg.body == '!ping') {
             client.sendMessage(msg.from,'pong');
         }
     });
-    
-    client.initialize();    
+
+    client.initialize();
 });
 */

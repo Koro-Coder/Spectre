@@ -59,7 +59,7 @@ const PROBLEM_DETAILS = `query selectProblem($titleSlug: String!) {
     }
 }`;
 
-const fetchDailyCodingChallenge = async () => {
+const fetchLCDailyCodingChallenge = async () => {
   const init = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -74,7 +74,7 @@ const fetchDailyCodingChallenge = async () => {
   return responseData.data.activeDailyCodingChallengeQuestion.question;
 };
 
-const fetchUserProfileInfo = async (username) => {
+const fetchLCUserProfileInfo = async (username) => {
   const init = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -91,7 +91,7 @@ const fetchUserProfileInfo = async (username) => {
   return responseData.data;
 };
 
-const fetchProblemDetails = async (titleSlug) => {
+const fetchLCProblemDetails = async (titleSlug) => {
   const init = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -115,7 +115,7 @@ const fetchProblemDetails = async (titleSlug) => {
 //fetchProblemDetails('replace-words');
 
 module.exports = {
-  fetchDailyCodingChallenge,
-  fetchProblemDetails,
-  fetchUserProfileInfo,
+  fetchLCDailyCodingChallenge,
+  fetchLCProblemDetails,
+  fetchLCUserProfileInfo,
 };
