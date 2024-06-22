@@ -14,13 +14,4 @@ function leetcodeDataHandler(updatedUser) {
   return leetcode;
 }
 
-function leetcodeProblemFormat(problem){
-  return `
-    Title : ${problem.title}
-    Difficulty : ${problem.difficulty}
-
-    Go to problem : https://leetcode.com/problems/${problem.titleSlug}/description/
-  `;
-}
-
-module.exports = {leetcodeDataHandler, leetcodeProblemFormat};
+module.exports = {leetcodeDataHandler};

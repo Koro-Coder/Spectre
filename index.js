@@ -9,10 +9,9 @@ const {run} = require('./controllers/commands/groupInfo.js')
 require('dotenv').config()
 
 mongoose.connect(process.env.DB_STRING).then(async() => {
-    //const msg = await handleCommands("1234567", "groupid", "mentions[0]", "/addCFprofile - teoaniac");
-    //console.log(msg);
-
-    handleLatestUpdates();
+    const msg = await handleCommands("1234567", "groupid", "1234567", "/showstats - teoaniac");
+    console.log(msg);
+    //handleLatestUpdates();
 });
 
 

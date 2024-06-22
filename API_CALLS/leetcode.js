@@ -1,6 +1,3 @@
-const { useHistory } = require("react-router-dom/cjs/react-router-dom.min");
-
-// Just some constants
 const LEETCODE_API_ENDPOINT = "https://leetcode.com/graphql";
 const DAILY_CODING_CHALLENGE_QUERY = `
 query questionOfToday {

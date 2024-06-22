@@ -3,6 +3,7 @@ const { fetchLCUserProfileInfo } = require("../API_CALLS/leetcode.js");
 const { leetcodeDataHandler } = require("../utils/leetcodeUtils.js");
 const { codeforcesDataHandler } = require("../utils/codeforcesUtils.js");
 const { addUserDetails, showUserDetails } = require("./commands/userInfo.js");
+const { userInfoFormat } = require("../utils/messageFormat.js");
 
 async function addLCProfile(phone_number, _, _, username) {
   const LCinfo = await fetchLCUserProfileInfo(username);
@@ -35,13 +36,13 @@ async function addCFProfile(phone_number, _, _, username) {
 
 async function showMyStats(phone_number, _, _, _) {
   const user = await showUserDetails(phone_number);
-  if (user) return user;
+  if (user) return userInfoFormat(user);
   else return "No records found.";
 }
 
 async function showStats(_, _, phone_number, _) {
   const user = await showUserDetails(phone_number);
-  if (user) return user;
+  if (user) return userInfoFormat(user);
   else return "No records found.";
 }
 

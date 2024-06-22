@@ -12,9 +12,7 @@ async function fetchCFUserSubmissionHistory(username) {
 async function fetchCFUserProfileInfo(username) {
   const response = await fetch(
     `https://codeforces.com/api/user.info?handles=${username}&checkHistoricHandles=false`);
-  //console.log(response);
   const res = await response.json();
-  //console.log(res);
   if(res.status=='OK')
     return res.result[0];
 }
@@ -43,10 +41,9 @@ async function fetchCFUserProblemCount(username)
       }
     }
   }
-  console.log(problems_solved);
   return problems_solved;
 }
 
 //fetchCFUserProfileInfo('technomaniac');
-fetchCFUserSubmissionHistory('technomaniac');
+//fetchCFUserSubmissionHistory('technomaniac');
 module.exports = {fetchCFUserSubmissionHistory, fetchCFUserProfileInfo, fetchCFUserProblemCount}

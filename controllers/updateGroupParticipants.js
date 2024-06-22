@@ -1,4 +1,3 @@
-const { useRouteMatch } = require("react-router-dom/cjs/react-router-dom.min");
 const { updateGroupDetails } = require("./commands/userInfo");
 
 async function addNewGroup(msg, client){
