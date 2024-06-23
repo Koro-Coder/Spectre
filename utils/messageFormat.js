@@ -19,7 +19,7 @@ Go to problem : https://codeforces.com/problemset/problem/${problem.contestId}/$
 function userInfoFormat(user){
   let leetcodeInfo, codeforcesInfo;
 
-  if(user.leetcode)
+  if(user.leetcode.username)
   {
     leetcodeInfo = `
     💡 Leetcode 💡
@@ -34,15 +34,16 @@ Current Badge: ${user.leetcode.badge}
     `;
   }
 
-  if(user.codeforces)
+  if(user.codeforces.username)
   {
     const filteredProblems = user.codeforces.problems_solved.filter(problem => problem.count > 0);
-    const problemsSolvedString = filteredProblems.map(problem => `${problem.range} : ${problem.count}`).join('\n');
+    const problemsSolvedString = filteredProblems.map(problem => `[${problem.range}] : ${problem.count}`).join('\n');
     const totalProblemsSolved = filteredProblems.reduce((total, problem) => total + problem.count, 0);
     codeforcesInfo = `
     💡 Codeforces 💡
 Username: ${user.codeforces.username}
 Total Problems Solved: ${totalProblemsSolved}
+Problems solved for rating ::
 ${problemsSolvedString}
 Rank: ${user.codeforces.rank}
 Rating: ${user.codeforces.rating}

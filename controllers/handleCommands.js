@@ -40,7 +40,9 @@ async function showMyStats(phone_number, _, _, _) {
   else return "No records found.";
 }
 
-async function showStats(_, _, phone_number, _) {
+async function showStats(_, _, mentions, _) {
+  if(mentions.length == 0) return "Member not mentioned";
+  const phone_number = mentions[0].slice(0, -5);
   const user = await showUserDetails(phone_number);
   if (user) return userInfoFormat(user);
   else return "No records found.";

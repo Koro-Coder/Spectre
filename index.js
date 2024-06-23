@@ -4,19 +4,22 @@ const { MongoStore } = require('wwebjs-mongo');
 const mongoose = require('mongoose');
 const {handleCommands} = require('./controllers/handleCommands.js')
 const {handleLatestUpdates} = require('./controllers/handlelLatestUpdates.js');
-const {run} = require('./controllers/commands/groupInfo.js')
+const {run} = require('./controllers/commands/groupInfo.js');
+const { checkGroup } = require('./controllers/checks/checkGroup.js');
+const { sendToOneGroup } = require('./controllers/messageDistribution/groupRouting.js');
+const { addNewGroup } = require('./controllers/updateGroupParticipants.js');
 
 require('dotenv').config()
 
 mongoose.connect(process.env.DB_STRING).then(async() => {
-    const msg = await handleCommands("1234567", "groupid", "1234567", "/showstats - teoaniac");
+    const msg = await handleCommands("123321", "groupid", "mentions[0]", "/show my stats ");
     console.log(msg);
     //handleLatestUpdates();
 });
 
 
 /*
-mongoose.connect(process.env.DB_STRING).then(() => {
+mongoose.connect(process.env.DB_STRING).then(async() => {
     console.log("Connected to server");
     const store = new MongoStore({ mongoose: mongoose });
     const client = new Client({
@@ -57,11 +60,20 @@ mongoose.connect(process.env.DB_STRING).then(() => {
         //const c2 = msg.from;
         //console.log('from  - ', c2);
     
-        console.log('message - ', msg.body);
-        run(msg);
-    
-        if (msg.body == '!ping') {
-            client.sendMessage(msg.from,'pong');
+        // if (msg.body == '!ping') {
+        //     client.sendMessage(msg.from,'pong');
+        // }
+
+        if(msg.body[0] == '/' && checkGroup(msg.from))
+        {
+            const reply = await handleCommands();
+            sendToOneGroup(msg, reply);
+        }
+
+        if(msg.body.replace(/\s+/g, "").toLowerCase() == '-activatespectrebot')
+        {
+            await addNewGroup(msg, client);
+            client.sendMessage(msg.from,'🤖 Spectre Bot is active now.');
         }
     });
 
