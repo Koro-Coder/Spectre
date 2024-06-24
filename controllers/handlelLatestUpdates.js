@@ -4,8 +4,9 @@ const { leetcodeDataHandler } = require("../utils/leetcodeUtils.js");
 const { fetchCFUserProfileInfo, fetchCFUserSubmissionHistory } = require("../API_CALLS/codeforces.js");
 const { codeforcesDataHandler } = require("../utils/codeforcesUtils.js");
 const { codeforcesProblemFormat, leetcodeProblemFormat } = require("../utils/messageFormat.js");
+const { sendToUserGroups } = require("./messageDistribution/groupRouting.js");
 
-async function handleLatestUpdates() {
+async function handleLatestUpdates(client) {
   const users = await User.find({});
   for (const user of users) {
     last_checked = user.last_checked;
@@ -18,10 +19,10 @@ async function handleLatestUpdates() {
         updatedUser.recentAcSubmissionList.reverse();
         for (const problem of updatedUser.recentAcSubmissionList) {
           if ( problem.title != last_title && problem.timestamp > user.last_checked) {
-            console.log("solved new problem in LC");
             // send back message
+            const str = `${user.phone_number} solved new problem on Leetcode \n`;
             const problemDetails = await fetchLCProblemDetails( problem.titleSlug );
-            console.log(leetcodeProblemFormat(problemDetails));
+            sendToUserGroups(client, user.phone_number, str + leetcodeProblemFormat(problemDetails));
           }
           last_checked = Math.max(problem.timestamp, last_checked);
           last_title = problem.title;
@@ -36,7 +37,8 @@ async function handleLatestUpdates() {
         const submissions = await fetchCFUserSubmissionHistory( user.codeforces.username );
         for (const submission of submissions) {
           if ( user.last_checked < submission.creationTimeSeconds && submission.verdict == "OK") {
-            console.log("Solved new Problem in CF", codeforcesProblemFormat(submission.problem));
+            const str = `${user.phone_number} solved new problem on Codeforces \n`;
+            sendToUserGroups(client, user.phone_number, str + codeforcesProblemFormat(submission.problem));
             user.codeforces.problems_solved[Math.floor((submission.problem.rating - 1) / 500)].count += 1;
           }
           last_checked = Math.max(last_checked, submission.creationTimeSeconds);
@@ -47,8 +49,8 @@ async function handleLatestUpdates() {
     await user.save();
   }
 
-  const all = await User.find({});
-  console.log(all);
+  // const all = await User.find({});
+  // console.log(all);
 }
 
 module.exports = { handleLatestUpdates };

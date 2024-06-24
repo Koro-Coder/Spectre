@@ -1,5 +1,6 @@
 function leetcodeProblemFormat(problem){
   return `
+  
 Title : ${problem.title}
 Difficulty : ${problem.difficulty}
 
@@ -9,6 +10,7 @@ Go to problem : https://leetcode.com/problems/${problem.titleSlug}/description/
 
 function codeforcesProblemFormat(problem){
   return `
+
 Title : ${problem.name}
 Rating : ${problem.rating}
 
@@ -17,7 +19,7 @@ Go to problem : https://codeforces.com/problemset/problem/${problem.contestId}/$
 }
 
 function userInfoFormat(user){
-  let leetcodeInfo, codeforcesInfo;
+  let leetcodeInfo = "", codeforcesInfo = "";
 
   if(user.leetcode.username)
   {
