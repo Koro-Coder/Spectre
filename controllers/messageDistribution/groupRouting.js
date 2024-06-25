@@ -9,7 +9,9 @@ async function sendToUserGroups(client, phone_number, reply){
     const user = await User.findOne({phone_number: phone_number});
     for(const group of user.groups)
     {
-        client.sendMessage(group, reply);
+        client.sendMessage(group, reply, {
+            mentions: [`${phone_number}@c.us`]
+        });
     }
 }
 

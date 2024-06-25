@@ -8,12 +8,4 @@ async function addNewGroup(msg, client){
     return "Spectre Bot Activated";
 }
 
-async function addNewParticipant(msg, client){
-    const groupid = "";
-    const participant = "";
-    const user = "";
-    await updateGroupDetails(groupid, [participant]);
-    return `Welcome ${user}`;
-}
-
-module.exports = {addNewGroup, addNewParticipant};
+module.exports = {addNewGroup};

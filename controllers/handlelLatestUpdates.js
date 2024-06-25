@@ -20,7 +20,7 @@ async function handleLatestUpdates(client) {
         for (const problem of updatedUser.recentAcSubmissionList) {
           if ( problem.title != last_title && problem.timestamp > user.last_checked) {
             // send back message
-            const str = `${user.phone_number} solved new problem on Leetcode \n`;
+            const str = `@${user.phone_number} solved new problem on Leetcode \n`;
             const problemDetails = await fetchLCProblemDetails( problem.titleSlug );
             sendToUserGroups(client, user.phone_number, str + leetcodeProblemFormat(problemDetails));
           }
@@ -37,7 +37,7 @@ async function handleLatestUpdates(client) {
         const submissions = await fetchCFUserSubmissionHistory( user.codeforces.username );
         for (const submission of submissions) {
           if ( user.last_checked < submission.creationTimeSeconds && submission.verdict == "OK") {
-            const str = `${user.phone_number} solved new problem on Codeforces \n`;
+            const str = `@${user.phone_number} solved new problem on Codeforces \n`;
             sendToUserGroups(client, user.phone_number, str + codeforcesProblemFormat(submission.problem));
             user.codeforces.problems_solved[Math.floor((submission.problem.rating - 1) / 500)].count += 1;
           }
@@ -48,7 +48,6 @@ async function handleLatestUpdates(client) {
     user.last_checked = last_checked;
     await user.save();
   }
-
   // const all = await User.find({});
   // console.log(all);
 }

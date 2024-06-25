@@ -21,9 +21,12 @@ const client = new Client({
           "https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.54.html",
       }});
 
-client.on('ready', () => {
+client.on('ready', async() => {
     console.log('Client is ready!');
-    handleLatestUpdates(client);
+    while(true)
+    {
+        await handleLatestUpdates(client);
+    }
 });
 
 client.on('qr', qr => {
