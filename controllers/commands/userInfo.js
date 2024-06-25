@@ -11,7 +11,6 @@ async function showUserDetails(phone_number){
 async function addUserDetails(phone_number, updates) {
   try {
     updates.phone_number = phone_number;
-
     const user = await User.findOneAndUpdate(
       { phone_number },
       { $set: updates },

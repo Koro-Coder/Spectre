@@ -19,7 +19,7 @@ async function handleLatestUpdates(client) {
           let last_title = "";
           updatedUser.recentAcSubmissionList.reverse();
           for (const problem of updatedUser.recentAcSubmissionList) {
-            if (problem.title !== last_title && problem.timestamp > user.last_checked) {
+            if (problem.title != last_title && problem.timestamp > user.last_checked) {
               // send back message
               const str = `@${user.phone_number} solved new problem on Leetcode \n`;
               const problemDetails = await fetchLCProblemDetails(problem.titleSlug);
