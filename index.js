@@ -12,9 +12,12 @@ const { addNewGroup } = require('./controllers/updateGroupParticipants.js');
 require('dotenv').config()
 
 mongoose.connect(process.env.DB_STRING).then(async() => {
-    const msg = await handleCommands("123321", "groupid", "mentions[0]", "/show my stats ");
-    console.log(msg);
-    //handleLatestUpdates();
+    //const msg = await handleCommands("123321", "groupid", "mentions[0]", "/show my stats ");
+    //console.log(msg);
+    while(true)
+    {
+        await handleLatestUpdates();
+    }
 });
 
 
