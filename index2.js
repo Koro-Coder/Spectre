@@ -4,11 +4,12 @@ const { MongoStore } = require('wwebjs-mongo');
 const mongoose = require('mongoose');
 const {handleCommands} = require('./controllers/handleCommands.js')
 const {handleLatestUpdates} = require('./controllers/handlelLatestUpdates.js');
-const {run} = require('./controllers/commands/groupInfo.js');
 const { checkGroup } = require('./controllers/checks/checkGroup.js');
 const { sendToOneGroup } = require('./controllers/messageDistribution/groupRouting.js');
 const { addNewGroup } = require('./controllers/updateGroupParticipants.js');
 const { onGroupJoin, addedMembers, activatedBot } = require('./utils/replies.js');
+const schedule = require('node-schedule');
+const { postDailyChallenge } = require('./controllers/postDailyChallenge.js');
 
 require('dotenv').config();
 
@@ -19,10 +20,13 @@ const client = new Client({
         type: "remote",
         remotePath:
           "https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.54.html",
-      }});
+    }});
 
 client.on('ready', async() => {
     console.log('Client is ready!');
+    schedule.scheduleJob('0 9 * * *', async () => {
+        await postDailyChallenge(client);
+    });
     while(true)
     {
         await handleLatestUpdates(client);
@@ -58,11 +62,3 @@ mongoose.connect(process.env.DB_STRING).then(async() => {
         client.sendMessage(notification.chatId, onGroupJoin);
     })
 });
-
-// async function run(client)
-// {
-//     while(true)
-//     {
-//         await handleLatestUpdates(client);
-//     }
-// }

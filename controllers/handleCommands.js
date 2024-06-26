@@ -16,7 +16,7 @@ async function addLCProfile(phone_number, _, _, username) {
     });
     return "User information updated";
   }
-  else  return "Invalid username";
+  else  return "⚠️ Invalid username";
 }
 
 async function addCFProfile(phone_number, _, _, username) {
@@ -31,13 +31,13 @@ async function addCFProfile(phone_number, _, _, username) {
     });
     return "User information updated";
   }
-  else  return "Invalid username";
+  else  return "⚠️ Invalid username";
 }
 
 async function showMyStats(phone_number, _, _, _) {
   const user = await showUserDetails(phone_number);
   if (user) return userInfoFormat(user);
-  else return "No records found.";
+  else return "⚠️ No records found.";
 }
 
 async function showStats(_, _, mentions, _) {
@@ -45,7 +45,7 @@ async function showStats(_, _, mentions, _) {
   const phone_number = mentions[0].slice(0, -5);
   const user = await showUserDetails(phone_number);
   if (user) return userInfoFormat(user);
-  else return "No records found.";
+  else return "⚠️ No records found.";
 }
 
 substrFuncMap = {
