@@ -1,4 +1,3 @@
 node_modules/
 .wwebjs_auth/
-notes/
-index2/
+.env/

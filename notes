@@ -1,9 +1,0 @@
-check for '/' begining command and checkGroup=true
-call handle commands
-send return statement as message
-
-check for '-activate spectre bot' command and activate this group, call addNewGroup
-
-on group join, checkGroup=true and call addNewParticipant
-
-call postDailyChallenge at 8:00 am.
