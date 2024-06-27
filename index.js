@@ -68,7 +68,6 @@ client.initialize();
 
 mongoose.connect(process.env.DB_STRING).then(async() => {
     client.on('message', async (msg) => {
-        console.log(msg.body);
         if(msg.body[0] == '/' && checkGroup(msg.from))
         {
             const reply = await handleCommands(msg.author.slice(0, -5), msg.from, msg.mentionedIds, msg.body);
