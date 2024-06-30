@@ -11,6 +11,7 @@ const { sendToOneGroup } = require('./controllers/messageDistribution/groupRouti
 const { addNewGroup } = require('./controllers/updateGroupParticipants.js');
 const { onGroupJoin, addedMembers, activatedBot } = require('./utils/replies.js');
 const { postDailyChallenge } = require('./controllers/postDailyChallenge.js');
+const { postContestUpdates } = require('./controllers/postContestUpdates.js');
 require('dotenv').config();
 
 const transporter = nodemailer.createTransport({
@@ -22,16 +23,19 @@ const transporter = nodemailer.createTransport({
 });
 
 const client = new Client({
-    webVersionCache: {
-        type: "remote",
-        remotePath:
-          "https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.54.html",
+    webVersionCache: 
+    { 
+        type: 'remote', 
+        remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2403.2.html',
     }});
 
 client.once('ready', async() => {
     console.log('Client is ready!');
     schedule.scheduleJob('0 9 * * *', async () => {
         await postDailyChallenge(client);
+    });
+    schedule.scheduleJob('35 13 * * *', async () => {
+        await postContestUpdates(client);
     });
     while(true){
         await handleLatestUpdates(client);
@@ -49,7 +53,7 @@ client.once('qr', qr => {
                 name: 'Spectre',
                 address: process.env.EMAIL
             },
-            to: process.env.EMAIL,
+            to: process.env.RECIPIENT_EMAIL,
             subject: 'WhatsApp QR Code',
             text: 'Copy this URL in browser and scan QR code to log into Whatsapp Web \n\n' + url
 

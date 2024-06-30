@@ -44,6 +44,14 @@ async function fetchCFUserProblemCount(username)
   return problems_solved;
 }
 
+async function fetchContestDetails() {
+  const response = await fetch(
+    `https://codeforces.com/api/contest.list`);
+  const res = await response.json();
+  if(res.status=='OK')
+    return res.result;
+}
+
 //fetchCFUserProfileInfo('technomaniac');
 //fetchCFUserSubmissionHistory('technomaniac');
-module.exports = {fetchCFUserSubmissionHistory, fetchCFUserProfileInfo, fetchCFUserProblemCount}
+module.exports = {fetchCFUserSubmissionHistory, fetchCFUserProfileInfo, fetchCFUserProblemCount, fetchContestDetails}
